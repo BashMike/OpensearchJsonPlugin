@@ -1,0 +1,53 @@
+apply plugin: 'opensearch.opensearchplugin'
+apply plugin: 'opensearch.yaml-rest-test'
+
+opensearchplugin {
+    name 'opensearch-json-parser-plugin'
+    description 'Custom OpenSearch REST plugin for educational purposes'
+    classname 'org.opensearch.rest.action.JsonParserPlugin'
+}
+
+ext {
+    projectSubstitutions = [:]
+    licenseFile = rootProject.file('LICENSE.txt')
+    noticeFile = rootProject.file('NOTICE.txt')
+}
+
+
+// disabling some unnecessary validations for this plugin
+licenseHeaders.enabled = false
+testingConventions.enabled = false
+forbiddenApis.ignoreFailures = false
+dependencyLicenses.enabled = false
+thirdPartyAudit.enabled = false
+forbiddenApisMain.ignoreFailures = true
+validateNebulaPom.enabled = false
+loggerUsageCheck.enabled = false
+
+buildscript {
+    ext {
+        opensearch_version = System.getProperty("opensearch.version", "2.5.0")
+        isSnapshot = "true" == System.getProperty("build.snapshot", "true")
+        buildVersionQualifier = System.getProperty("build.version_qualifier", "")
+    }
+
+    repositories {
+        mavenCentral()
+        jcenter()
+        mavenLocal()
+        gradlePluginPortal()
+    }
+
+    dependencies {
+        classpath "org.opensearch.gradle:build-tools:${opensearch_version}"
+    }
+}
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.jetbrains:annotations:24.0.0'
+}
